@@ -53,7 +53,7 @@ namespace Core_WebApp.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var res = await repository.GetAsync(id);
-            ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
+            ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName", res.CategoryRowId);
             return View(res);
         }
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core_WebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200126073647_thirdMigration")]
+    [Migration("20200201140255_thirdMigration")]
     partial class thirdMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,9 +61,8 @@ namespace Core_WebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Price")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProductId")
                         .IsRequired()

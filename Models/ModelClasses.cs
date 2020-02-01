@@ -37,7 +37,7 @@ namespace Core_WebApp.Models
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Price is must")]
-        public string Price { get; set; }
+        public int Price { get; set; }
 
         public Category Category { get; set; }
 
