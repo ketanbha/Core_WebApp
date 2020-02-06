@@ -62,14 +62,33 @@ namespace Core_WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Product product)
         {
-            //check for validation
-            if (ModelState.IsValid)
+            try
             {
-                var res = await repository.CreateAsync(product);
-                return RedirectToAction("Index");
+                //check for validation
+                if (ModelState.IsValid)
+                {
+                    if (product.Price < 0)
+                    {
+                        throw new Exception("Product price should not be negative");
+                    }
+                    var res = await repository.CreateAsync(product);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
+                    return View(product);
+                }
             }
-            ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
-            return View(product);
+            catch(Exception ex)
+            {
+                return View("Error", new ErrorViewModel()
+                {
+                    ControllerName = this.RouteData.Values["controller"].ToString(),
+                    ActionName  = this.RouteData.Values["action"].ToString(),
+                    ErrorMessage = ex.Message
+                });
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
