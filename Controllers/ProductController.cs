@@ -62,8 +62,8 @@ namespace Core_WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Product product)
         {
-            try
-            {
+            //try
+            //{
                 //check for validation
                 if (ModelState.IsValid)
                 {
@@ -79,16 +79,16 @@ namespace Core_WebApp.Controllers
                     ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
                     return View(product);
                 }
-            }
-            catch(Exception ex)
-            {
-                return View("Error", new ErrorViewModel()
-                {
-                    ControllerName = this.RouteData.Values["controller"].ToString(),
-                    ActionName  = this.RouteData.Values["action"].ToString(),
-                    ErrorMessage = ex.Message
-                });
-            }
+            //}
+            //catch(Exception ex)
+            //{
+            //    return View("Error", new ErrorViewModel()
+            //    {
+            //        ControllerName = this.RouteData.Values["controller"].ToString(),
+            //        ActionName  = this.RouteData.Values["action"].ToString(),
+            //        ErrorMessage = ex.Message
+            //    });
+            //}
         }
 
         public async Task<IActionResult> Edit(int id)
