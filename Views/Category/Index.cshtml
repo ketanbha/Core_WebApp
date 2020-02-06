@@ -14,9 +14,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryRowId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.CategoryId)
             </th>
             <th>
@@ -32,9 +29,6 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryRowId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.CategoryId)
             </td>
             <td>
@@ -44,8 +38,9 @@
                 @Html.DisplayFor(modelItem => item.BasePrice)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.CategoryRowId }) |
-                @Html.ActionLink("Delete", "Delete", new {  id=item.CategoryRowId })
+                @Html.ActionLink("Edit", "Edit", new { id = item.CategoryRowId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CategoryRowId }) |
+                @Html.ActionLink("ShowProducts", "ShowProducts", new { id = item.CategoryRowId })
             </td>
         </tr>
 }

@@ -20,16 +20,38 @@ namespace Core_WebApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var res = await repository.GetAync();
+            List<Product> products = new List<Product>();
+            //read data from TempData
+            int catRowId = Convert.ToInt32(TempData["CategoryRowId"]);
+            if (catRowId != 0)
+            {
+                products = (from p in await repository.GetAync()
+                            where p.CategoryRowId == catRowId
+                            select p).ToList();
+            }
+            else
+            {
+                products = repository.GetAync().Result.ToList();
+            }
             ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
-            return View(res);
+            return View(products);
         }
 
         public async Task<IActionResult> Create()
         {
+            // define a ViewBag that will pass the Category List to Create View	            // define a ViewBag that will pass the Category List to Create View
+            // so that it will be rendered in DropDown aka <select>	            // so that it will be rendered in DropDown aka <select>
+            // use the 'SelectList' class that will carry the data	            // use the 'SelectList' class that will carry the data
+            // Note: The Key of ViewBag must match with the Property from Model class bind to View	            // Note: The Key of ViewBag must match with the Property from Model class bind to View
+            // so that it can be used for Form Post	            // so that it can be used for Form Post
+            // ViewBag compiled as ViewDataDiectionary at Runtime	            // ViewBag compiled as ViewDataDiectionary at Runtime
+            // ViewBag will be expired after the method completes it execution	            // ViewBag will be expired after the method completes it execution
+            // IMP**, if a View Accept/uses a ViewBag then all action methods	            // IMP**, if a View Accept/uses a ViewBag then all action methods
+            // returning the same view must pass ViewBag to View else View will crash
+
             var res = new Product();
             ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
-            return View(res);
+            return View(res); // return the create view
         }
 
         //public IActionResult Create()
