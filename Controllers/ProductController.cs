@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Core_WebApp.Models;
 using Core_WebApp.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Core_WebApp.CustomProviders;
 
 namespace Core_WebApp.Controllers
 {
@@ -48,10 +49,17 @@ namespace Core_WebApp.Controllers
             // ViewBag will be expired after the method completes it execution	            // ViewBag will be expired after the method completes it execution
             // IMP**, if a View Accept/uses a ViewBag then all action methods	            // IMP**, if a View Accept/uses a ViewBag then all action methods
             // returning the same view must pass ViewBag to View else View will crash
-
-            var res = new Product();
             ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
-            return View(res); // return the create view
+
+            if (TempData.Values.Count > 0)
+            {
+                Product newProduct = TempData.GetData<Product>("NewProduct") as Product;
+                return View(newProduct);
+            }
+            else
+            {
+                return View(new Product()); // return the create view
+            }
         }
 
         //public IActionResult Create()
@@ -64,21 +72,22 @@ namespace Core_WebApp.Controllers
         {
             //try
             //{
-                //check for validation
-                if (ModelState.IsValid)
+            //check for validation
+            if (ModelState.IsValid)
+            {
+                if (product.Price < 0)
                 {
-                    if (product.Price < 0)
-                    {
-                        throw new Exception("Product price should not be negative");
-                    }
-                    var res = await repository.CreateAsync(product);
-                    return RedirectToAction("Index");
+                    TempData.SetData<Product>("NewProduct", product);
+                    throw new Exception("Product price should not be negative");
                 }
-                else
-                {
-                    ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
-                    return View(product);
-                }
+                var res = await repository.CreateAsync(product);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.CategoryRowId = new SelectList(await catRepository.GetAync(), "CategoryRowId", "CategoryName");
+                return View(product);
+            }
             //}
             //catch(Exception ex)
             //{
